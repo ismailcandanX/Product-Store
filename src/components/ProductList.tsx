@@ -2,7 +2,7 @@ import { nanoid } from "@reduxjs/toolkit";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { getProductsAsync } from "../redux/product/productsSlice";
+import { filterCategory, getProductsAsync } from "../redux/product/productsSlice";
 
 function ProductList() {
     const dispatch = useAppDispatch();
@@ -11,8 +11,10 @@ function ProductList() {
         dispatch(getProductsAsync())
     }, [dispatch]);
 
-    const products = useAppSelector((state: any) => state.products.products);
-    console.log(products);
+    const getProducts = useAppSelector(filterCategory)
+    const search = useAppSelector(state => state.products.search)
+
+    const products = getProducts.filter((product: any) => product.name.toLowerCase().includes(search.toLowerCase()))
 
     return (
         <div>
